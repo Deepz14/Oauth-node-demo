@@ -10,6 +10,13 @@ connectDB();
 // view Engine EJS template config
 app.set('view engine', 'ejs');
 
+// import all routes
+const authRoutes = require('./routers/auth');
+
+
+// Route Middlewares
+app.use('/auth', authRoutes);
+
 // welcome route
 app.get('/', (req, res) => {
     res.render('home');
