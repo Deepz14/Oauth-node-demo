@@ -9,7 +9,17 @@ router.get('/login', (req, res) => {
 router.get('/google', 
     passport.authenticate('google', {
         scope: ['profile', 'email']
-    })
+    }),
+    (req, res) => {
+        res.send('login with google');
+    }
+);
+
+router.get('/google/callback', 
+    passport.authenticate('google', { failureRedirect: '/auth/login' }),
+    (req, res) => {
+        res.send('google callback');
+    }
 );
 
 module.exports = router;
