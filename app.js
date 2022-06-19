@@ -2,6 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db_config');
 const app = express();
 require('dotenv').config();
+require('./passport/passport');
 const port = process.env.port || 5000
 
 // connect with Database
