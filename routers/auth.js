@@ -4,7 +4,12 @@ const passport = require('passport');
 
 router.get('/login', (req, res) => {
     res.render('login');
-})
+});
+
+router.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/auth/login');
+});
 
 router.get('/google', 
     passport.authenticate('google', {
@@ -16,10 +21,10 @@ router.get('/google',
 );
 
 router.get('/google/callback', 
-    passport.authenticate('google', { failureRedirect: '/auth/login' }),
+    passport.authenticate('google'),
     (req, res) => {
-        console.log('callback', req.user);
-        res.send('google callback');
+        console.log('logged in User', req.user);
+        res.redirect('/');
     }
 );
 

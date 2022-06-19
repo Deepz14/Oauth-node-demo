@@ -3,6 +3,16 @@ const User = require('../models/user');
 
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -12,8 +22,8 @@ passport.use(new GoogleStrategy({
     User.findOne({email: profile._json.email})
     .then(user => {
         if(user){
-            console.log('User is already exists in Database', user);
             next(null, user);
+            // cookie session
         }
         else{
             // store a data into the database;
@@ -23,18 +33,16 @@ passport.use(new GoogleStrategy({
                 googleId: profile.id
             })
             .then(user => {
-                console.log('user', user);
                 next(null, user);
+                // cookie session
             })
             .catch(err =>  {
                 console.log('Db error', err);
-                next(null, user);
             })
         }
     })
     .catch(err => {
         console.log('Error', err);
-        next(null, user);
     });
   }
 ));
